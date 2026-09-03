@@ -12,8 +12,8 @@ using std::cout;
 
 //entry point(where the logic begins to start for goal) aka main
 int main() { 
-
+ cout << "helo world";
     return 0;
 }
 //outputs integer int/starts logic main/ what is being input ()/ defines what main is {}/ only and always brings 0/full stop ;
-// int is needed to figure out sucess or fail
+// int is needed to figure out sucess or fail / shows what the symbols "helo world" and writes it <<
