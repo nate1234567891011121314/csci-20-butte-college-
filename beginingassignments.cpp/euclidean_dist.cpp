@@ -5,6 +5,7 @@ using std::abs;
 using std::cout;
 using std::endl;
 
+
 // Calculates horizontal distance (X coordinates)
 int A_input(int m[2], int n[2]) { 
     return abs(m[0] - n[0]);
@@ -14,14 +15,15 @@ int B_input (int x[2], int z[2]) {
     return abs(x[1] - z[1]);
 }
 // Calculates the final hypotenuse
-int D_input( int a, int b ) { 
-    int c = (a*a + b*b) ; 
-    return 0;
+double D_input( int a, int b ) { 
+    return std::sqrt(a*a + b*b) ; 
+
     }                     
                      
 int main() {
     int p1[2] = {1, 2};
     int p2[2] = {4, 3};
+
 
     // Calculate and print the final Pythagorean result directly
     /*cout << A_input(p1,p2) << endl;
