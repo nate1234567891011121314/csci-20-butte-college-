@@ -54,7 +54,7 @@ int player(char piece)
     return false;
 }*/
 // c++ is cool in the fact the archetics have thought threw everything like multiple if statements i just had to look up how to combine them into one condirional rule
-bool onBoard(int x, int y) {
+bool onboard(int x, int y) {
     return x >= 0 && x < 8 && y >= 0 && y < 8;
 }
 // i know that i could have "and"(for booleans)in the code below but idk how so we could so we taking the long route
@@ -87,7 +87,7 @@ What actually happening
 
 */ 
     // IF the piece is the Team 1 symbol ('&')
-    // Give true and false names 
+    // Give true and false names just like my automaton 
     bool direction_ALLOWED = true;
     bool direction_BLOCKED = false;
 //this saying if piece"&" is only allow to decrease the space of the number on the grid in order to move forward that statement is true anthing else is flase and blocked
@@ -111,7 +111,7 @@ What actually happening
     return direction_BLOCKED; 
 }
 
-// today i learned that theres a reason why print isnt always used can void can be used gives meaning to the word examineThisPiece
+// today i learned that theres a reason why print isnt always used can void can be used gives meaning to the word examineThisPiece and making ti into a function 
 // pretty much like most usefull thing ever because it gives meaning to the text and we describe what is going on inside this
 //ext pretty much making the text into a function 
 void examineThisPiece(int x, int y) {
@@ -119,32 +119,140 @@ void examineThisPiece(int x, int y) {
      you index(the bars [y][x]) the row tracker variable (y) first to select the correct horizontal row vector line, then apply the column tracker variable (x) to pinpoint the precise cell grid space.
 • char piece =: Stores the character found at those coordinates inside a local variable called piece.*/
     char piece = board[x][y]; 
+      // pretty much identifies the team of the piece
     int  team  = player(piece);
-    
+  //if the team is neither 1 & or 2 (*) the team is 0 being empty of any piece. if the space is 0(empty) than return meanin skip this jit and move on to the nxt
     if (team == 0) return; 
+// pretty much making listing how there are 4 sets (how many items pretty much saying there are 1set(-1,1) 2set{}3set{}4set{}) and 2 is how many numbers in the set 
+/* 
+ {-1, -1}: Up Left
+ {1, -1}: Up Right
+ {-1, 1}: Down left
+ {1, 1}: Down Right 
+ its harder to visualize bc the grpah is weird
+ 12345678
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ A visual to help understand 
 
-    int directions[4][2] = { {-1, -1}, {1, -1}, {-1, 1}, {1, 1} };
+          x's
+      x - 1      x      x + 1
+     .────────────────────────.
+y - 1│  [0]     │      │  [1]     │  <- y'S above
+     │ Up-Left  │      │ Up-Right │
+     ├──────────┼──────┼──────────┤
+  y  │          │ me   │          │  <- Current y's
+     │          │Piece │          │
+     ├──────────┼──────┼──────────┤
+y + 1│  [2]     │      │  [3]     │  <- y's below
+     │Down-Left │      │Down-Right│
+      ────────────────────────────────────
 
-    for (int i = 0; i < 4; i++) {
-        int dx = directions[i][0]; 
-        int dy = directions[i][1]; 
+ pretty much the diragonlly moves that both teams can make */
+    int directional_possiblities[4][2] = { {-1, -1}, {1, -1}, {-1, 1}, {1, 1} };
+//declare loop within this brackets(starting value ;(end setence) when to stop;(end sentenece) records howmany rounds ) side note 4 sets but the count 0 1 2 3
+/*
 
-        // 1st Condition: Check if it can move diagonally left or right (Always true / Team check)
-        if (Yeahcomethisway(piece, dy) == false) {
-            continue; // Wrong vertical direction -> Blocked
+has a loop names the loop variable "bounds" starts at 0, then checks if its less than four because there are 4 sets therefore 4 possibliltys for movement
+(if less than four hasnt checked every movement keep checking,if has checked 4 then done) starts the checks 
+after every round of the loop it records the loop variable counter "bounds". bounds= bounds+1 
+
+basically saying after first set is checked 0 bound; 0<4 yup
+to next second set checks add 0bound+1= 1; 1<4 yup
+to next third set 1bound+1=2; 2<4 yup
+to next fourth set 2+1=3; 3<4 yup
+to next fifth set 3+1=4; 4<4 nope
+stop all sets have been checked
+
+round 1 look at Set 1 = (grab -1x,then grab -1y) 0 bound
+round 2 look at Set 2 = (grab 1x,then grab-1y) 1 bound
+round 3 look at Set 3 = (grab-1x,then grab 1y) 2 bound
+round 4 look at Set 4 = (grab 1x,then grab 1y) 3 bound
+
+ [0] looking for data of x's and [1] is looking for data of y's
+the bounds represents the round(set of data)
+all of and that data(weather is (what set it is, x's) or (what set it is, y's) is called directional possibilities 
+
+ saysto computer where  (0-3 set) (all x's)
+ directional_possiblities[bounds][0]; 
+
+ saysto computer where  (0-3 set) (all y's)
+ directional_possiblities[bounds][1]; 
+*/
+
+    for (int bounds = 0; bounds < 4; bounds=bounds+1) {
+        
+    // 1st Condition: Check if the piece is physically allowed to move in this vertical direction.
+    // Team 1 (&) can only move diagonally forward-up: left (-1, -1) or right (1, -1).
+    // Team 2 (*) can only move diagonally forward-down: left (-1, 1) or right (1, 1).
+    // The computer checks the Yeahcomethisway function and if finds this direction is not possible, 
+    // it blocks the path, skips the rest of this round's conditions, and moves to the next direction set for this piece.
+    // It will not bother checking walls or teammates for this direction. If it is true, it advances to the next condition.
+
+         if (Yeahcomethisway(piece, directional_possiblities[bounds][1]) == false) {
+            continue; 
         }
 
-        int nx = x + dx;          
-        int ny = y + dy;
+/*
 
-        // 2nd Condition: "there's a wall?"
-        if (onBoard(nx, ny) == false) {               
+Round 1 (bounds = 0)
+
+What it grabs directly: Column 0 is -1, Column 1 is -1
+The Math:
+Target_x = x + directional_possiblities[0][0] → x + (-1)
+Target_y = y + directional_possiblities[0][1] → y + (-1)
+Visual Target: The computer directly targets Up and Left at square.
+
+Round 2 (bounds = 1)
+
+What it grabs directly: Column 0 is 1, Column 1 is -1
+The Math:
+Target_x = x + directional_possiblities[1][0] → x + 1
+Target_y = y + directional_possiblities[1][1] → y + (-1)
+Visual Target: The computer directly targets Up and Right at square.
+
+Round 3 (bounds = 2)
+
+What it grabs directly: Column 0 is -1, Column 1 is 1
+The Math:
+Target_x = x + directional_possiblities[2][0] → x + (-1)
+Target_y = y + directional_possiblities[2][1] → y + 1
+Visual Target: The computer directly targets Down and Left at square.
+
+Round 4 (bounds = 3)
+
+What it grabs directly: Column 0 is 1, Column 1 is 1
+The Math:
+Target_x = x + directional_possiblities[3][0] → x + 1
+Target_y = y + directional_possiblities[3][1] → y + 1
+Visual Target: The computer directly targets Down and Right at square.
+
+
+*/
+        int Target_x = x + directional_possiblities[bounds][0];          
+        int Target_y = y + directional_possiblities[bounds][1];
+/*
+2 condition
+asks if funtion onboard (checks if the piece is actually on the board) 
+we checked if the piece is moving diagnally so we move diagnolly left or right, if that move made is the piece going to be on the board?
+if true that this data of the piece future space is off the board then blocked 
+if false that this data of piece future space is on the board move to the next condition 
+*/
+        
+        if (onboard(Target_x, Target_y) == false) {               
             // True: consequence direction blocked
             continue; 
         } 
         // False: move to next condition
+/**/
 
-        int neighbourplayer = player(board[ny][nx]);
+        int neighbourplayer = player(board[Target_y][Target_x]);
 
         // 3rd Condition: "there's a teammate?"
         if (neighbourplayer == team) {         
@@ -156,20 +264,20 @@ void examineThisPiece(int x, int y) {
         // 4th Condition: check if there is empty space
         if (neighbourplayer == 0) {            
             // True: direction step
-            cout << "  STEP  " << char('A' + x) << (y + 1) << " → " << char('A' + nx) << (ny + 1) << endl;
+            cout << "  STEP  " << char('A' + x) << (y + 1) << " → " << char('A' + Target_x) << (Target_y + 1) << endl;
             continue; 
         }
         // False: move to next condition
 
         // 5th Condition: "is the diagonal space of an opponent"
         // (Since it's not a wall, not a teammate, and not empty, it MUST be an opponent!)
-        int bx = x + (2 * dx); 
-        int by = y + (2 * dy);
+        int Actualization_x = x + (2 * directional_possiblities[bounds][0]); 
+        int Actualization_y = y + (2 * directional_possiblities[bounds][1]);
 
         // 5thA Condition: "is the space behind the diagonal space of an opponent empty?"
-        if (onBoard(bx, by) == true && board[by][bx] == '.') {
+        if (onboard(Actualization_x, Actualization_y) == true && board[Actualization_y][Actualization_x] == '.') {
             // True: direction jump
-            cout << "  JUMP  " << char('A' + x) << (y + 1) << " → " << char('A' + bx) << (by + 1) << endl;
+            cout << "  JUMP  " << char('A' + x) << (y + 1) << " → " << char('A' + Actualization_x) << (Actualization_y + 1) << endl;
         } else {
             // False: direction blocked
             continue; 
