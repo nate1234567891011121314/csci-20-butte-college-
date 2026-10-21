@@ -285,9 +285,8 @@ if false that this data of piece future space is on the board move to the next c
 
 
 }
-//-------------------------------------------
+
 // Example: scan the whole board and examine every piece of a team
-// ------------------------------------------------------------
 void scanAllPieces(int team); 
 {
     for (int r = 0; r < 8; ++r) {
