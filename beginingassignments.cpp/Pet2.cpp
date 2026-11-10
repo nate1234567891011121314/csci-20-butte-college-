@@ -1,15 +1,15 @@
 #include "Pet2.hpp"
 
 int main() {
-    Pet bob (2000,1000, "bob");
-    Pet bill (200, 5, "bill");
+    Dog bob (2000,1000, "bob");
+    Dog bill (200, 5, "bill");
     
-cout << bob.same_size_Pet (bob, bill) << endl;
+    cout << bob.samesizePet (bob, bill) << endl;
 
     return 0;
 }
 
-bool same_size_Pet(Pet a ,Pet b) {
+bool samesizePet(Pet a ,Pet b) {
     if (a.size == b.size) {
         return true; 
         } else {
@@ -17,7 +17,7 @@ bool same_size_Pet(Pet a ,Pet b) {
     }
 }
 
-bool same_name_Pet(Pet a ,Pet b) {
+bool samenamePet(Pet a ,Pet b) {
     if (a.name == b.name) {
         return true; 
         } else {

@@ -12,18 +12,34 @@ class Pet {
 -name is over 10 charaters 
 */
 private:
-    int size ;// weight in grams ,
+    int size;// weight in grams ,
     string name;//we make array of amount of letters that can be used. name = 10 charaters 
     int food; // kg food per week
 public:
-    bool  same_size_Pet(Pet a ,Pet b);
-    bool same_name_Pet(Pet a ,Pet b);
+ bool samesizePet(Pet a ,Pet b);
+    bool samenamePet(Pet a ,Pet b);
     Pet();
     Pet(int s,int f, string n);
+
 
     //a class defination isnt accompishing data multipacation a class is defination the structure of sdta. 
     //the structure of data is a type. its must be known before your program is written 
 };
+// defination f fog is dependent on pet 
+class Dog: Pet {
+    private:
+    public:
+    Dog();
+    Dog(int s, int f, string n);
+};
+
+Dog::Dog(int s, int f, string n) {
+    Pet(s,f,n);
+}
+
+Dog :: Dog(){
+    Pet();
+}
 
 Pet::Pet() { //defualt
     size = 0;
@@ -34,11 +50,8 @@ Pet::Pet() { //defualt
 }
 
 Pet::Pet( int s, int f, string n) {
-size= s;
     size= s;
     food= f;
     name =n;
-    
-
 
 }
