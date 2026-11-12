@@ -28,17 +28,23 @@ public:
 // defination f fog is dependent on pet 
 class Dog: Pet {
     private:
+    //2 data
+    int coat_length ;//inches 
     public:
+    bool Do_YOU_NEED_HAIRCUT(int d);//does the dog need a hair cut 
+    
     Dog();
-    Dog(int s, int f, string n);
+    Dog(int s, int f, string n,int c);
 };
 
-Dog::Dog(int s, int f, string n) {
+Dog::Dog(int s, int f, string n,int c) {
     Pet(s,f,n);
+    coat_length= c;
 }
 
 Dog :: Dog(){
     Pet();
+    coat_length= 0;
 }
 
 Pet::Pet() { //defualt
